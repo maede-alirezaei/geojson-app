@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
-import LocationInput from "./components/LocationInput";
+import LocationInput, { Coordinates } from "./components/LocationInput";
 import Map from "./components/Map";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import osmtogeojson from "osmtogeojson";
 export interface GeoJsonData {
   type:
@@ -22,28 +22,30 @@ function App() {
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async (coordinates: { lat: number; lon: number }) => {
+  const fetchData = async (coordinates: Coordinates) => {
     setError("");
     setLoading(true);
     try {
-      const validLat = Math.min(90, Math.max(-90, coordinates.lat));
-      const validLon = Math.min(180, Math.max(-180, coordinates.lon));
-      const bboxSize = 0.1;
       const bbox = {
-        minLat: validLat - bboxSize / 2,
-        minLon: validLon - bboxSize / 2,
-        maxLat: validLat + bboxSize / 2,
-        maxLon: validLon + bboxSize / 2,
+        minLat: coordinates.minLat,
+        minLon: coordinates.minLon,
+        maxLat: coordinates.maxLat,
+        maxLon: coordinates.maxLon,
       };
       console.log(bbox);
       const response = await axios.get(
         `https://www.openstreetmap.org/api/0.6/map?bbox=${bbox.minLon},${bbox.minLat},${bbox.maxLon},${bbox.maxLat}`
       );
       const geojson = osmtogeojson(response.data);
+      console.log(geojson);
       setGeojsonData(geojson);
       setLoading(false);
-    } catch (error: AxiosError) {
-      setError(error.response?.data);
+    } catch (error : unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        setError(error.response.data);
+      } else {
+        setError("An error occurred");
+      }
       setLoading(false);
     }
   };

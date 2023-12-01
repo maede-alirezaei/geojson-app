@@ -3,19 +3,29 @@ import "./LocationInput.css";
 import InputField from "./InputField";
 
 interface LocationInputProps {
-  onLocationSubmit: ({ lat, lon }: { lat: number; lon: number }) => void;
+  onLocationSubmit: (coordinates: Coordinates) => void;
 }
-
+export interface Coordinates {
+  maxLat: number;
+  minLat: number;
+  maxLon: number;
+  minLon: number;
+}
 const LocationInput = ({ onLocationSubmit }: LocationInputProps) => {
-  const [lat, setLat] = useState("");
-  const [lon, setLon] = useState("");
+  const [coordinates, setCoordinates] = useState({
+    maxLat: "",
+    minLat: "",
+    maxLon: "",
+    minLon: "",
+  });
 
   const handleSubmit = () => {
-    const latitude = parseFloat(lat.trim());
-    const longitude = parseFloat(lon.trim());
-
-    if (!isNaN(latitude) && !isNaN(longitude)) {
-      onLocationSubmit({ lat: latitude, lon: longitude });
+    const maxLat = parseFloat(coordinates.maxLat.trim());
+    const minLat = parseFloat(coordinates.minLat.trim());
+    const maxLon = parseFloat(coordinates.maxLat.trim());
+    const minLon = parseFloat(coordinates.minLat.trim());
+    if (!isNaN(maxLat) && !isNaN(maxLon) && !isNaN(minLat) && !isNaN(minLat)) {
+      onLocationSubmit({ minLat, maxLat, maxLon, minLon });
     } else {
       alert("Please enter valid latitude and longitude values.");
     }
@@ -24,15 +34,41 @@ const LocationInput = ({ onLocationSubmit }: LocationInputProps) => {
   return (
     <div className="location-input-container">
       <InputField
-        label="Enter Latitude:"
-        value={lat}
-        onChange={(e) => setLat(e.target.value)}
+        value={coordinates.minLat}
+        label="Enter min Latitude:"
+        onChange={(e) =>
+          setCoordinates((prev) => {
+            return { ...prev, minLat: e.target.value };
+          })
+        }
       />
 
       <InputField
-        label="Enter Longitude:"
-        value={lon}
-        onChange={(e) => setLon(e.target.value)}
+        value={coordinates.minLon}
+        label="Enter min Longitude:"
+        onChange={(e) =>
+          setCoordinates((prev) => {
+            return { ...prev, minLon: e.target.value };
+          })
+        }
+      />
+      <InputField
+        value={coordinates.maxLat}
+        label="Enter max Latitude:"
+        onChange={(e) =>
+          setCoordinates((prev) => {
+            return { ...prev, maxLat: e.target.value };
+          })
+        }
+      />
+      <InputField
+        value={coordinates.maxLon}
+        label="Enter max Longitude:"
+        onChange={(e) =>
+          setCoordinates((prev) => {
+            return { ...prev, maxLon: e.target.value };
+          })
+        }
       />
 
       <button className="submit-button" onClick={handleSubmit}>
