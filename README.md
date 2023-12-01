@@ -1,11 +1,18 @@
-# React + TypeScript + Vite
+# GeoJSON Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This web app is designed to retrieve "GeoJSON features" of a location specified by coordinates, serving as a geolocation box. The frontend is implemented using the React JS framework, and it interacts with the OpenStreetMap API to gather information in "osm" format, converting it to "GeoJSON" for proper display of the dataset.
 
-Currently, two official plugins are available:
+## Technologies Used
+- React +TypeScript + Vite 
+- OpenStreetMap API (https://www.openstreetmap.org/api/0.6/map)
+- `osmtogeojson` for data type conversion
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/geojson-web-app.git
 
 ## Expanding the ESLint configuration
 
